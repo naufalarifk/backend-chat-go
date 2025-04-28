@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/TutorialEdge/realtime-chat-go-react/pkg/websocket"
+	"realtime-chat-backend/pkg/websocket"
 )
+
+var store *websocket.MessageStore
 
 func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("WebSocket Endpoint Hit")
@@ -33,7 +35,13 @@ func setupRoutes() {
 }
 
 func main() {
-	fmt.Println("Distributed Chat App v0.01")
+	store = websocket.NewMessageStore()
+
+	if len(store.GetLastMessages(10)) == 0 {
+		fmt.Println("✅ NewMessageStore created successfully and is empty.")
+	} else {
+		fmt.Println("❌ Store is not empty, something is wrong.")
+	}
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
 }
