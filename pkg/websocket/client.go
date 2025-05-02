@@ -53,9 +53,6 @@ func (c *Client) Read() {
 			Timestamp: time.Now(),
 		}
 		store.AddMessage(storedMessages)
-
-		log.Println("Current Chat")
-
 		for _, msg := range store.GetLastMessages(10) {
 			log.Printf("- [%s] %s: %s\n", msg.Timestamp.Format("15:04:05"), msg.Sender, msg.Content)
 		}
