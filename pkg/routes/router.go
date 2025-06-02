@@ -40,6 +40,7 @@ func SetupRoutes(db *sql.DB) {
 	//SERVE MESSAGES
 
 	router.GET("/messages", models.GetMessages(db))
+	router.POST("/messages", models.AddNewMessage(db))
 
 	router.Run(":8080")
 }
