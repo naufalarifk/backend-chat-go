@@ -50,11 +50,12 @@ func (c *Client) Read() {
 			Sender:    c.ID,
 			Content:   incoming.Body,
 			RoomId:    "default-room",
-			Timestamp: time.Now(),
+			Timestamp: time.Now().String(),
 		}
+
 		store.AddMessage(storedMessages)
 		for _, msg := range store.GetLastMessages(10) {
-			log.Printf("- [%s] %s: %s\n", msg.Timestamp.Format("15:04:05"), msg.Sender, msg.Content)
+			log.Printf("- [%s] %s: %s\n", msg.Timestamp, msg.Sender, msg.Content)
 		}
 
 	}
