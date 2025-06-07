@@ -61,7 +61,14 @@ func AddNewMessage(db *sql.DB) gin.HandlerFunc {
 		}
 
 		if msg.Timestamp == "" {
-			msg.Timestamp = time.Now().String()
+			msg.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+		} else {
+			parsed, err := time.Parse(time.RFC3339, msg.Timestamp)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid timestamp format"})
+				return
+			}
+			msg.Timestamp = parsed.Format("2006-01-02 15:04:05")
 		}
 
 		query := "INSERT INTO message (Sender, Content, RoomId, Timestamp) VALUES (?, ?, ?, ?)"
