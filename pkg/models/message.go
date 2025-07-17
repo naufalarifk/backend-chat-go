@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"encoding/json"
 	"log"
 	"net/http"
 	"realtime-chat-backend/pkg/database"
@@ -11,6 +12,15 @@ import (
 )
 
 //typing and error handling
+
+type Envelope struct {
+	Type int             `json:"type"`
+	Body json.RawMessage `json:"string"`
+}
+
+type SysMsg struct {
+	Message string `json:"message"`
+}
 
 type Message struct {
 	ID        string `json:"id"`
