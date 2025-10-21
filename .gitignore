@@ -1,2 +1,9 @@
 
 .env
+
+*.md
+*.log
+*.exe
+/tmp
+/-p
+/bin
