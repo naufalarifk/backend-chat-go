@@ -6,6 +6,9 @@
 BINARY_NAME=chat-server
 MAIN_PATH=cmd/server/main.go
 BUILD_DIR=bin
+POSTGRES_USER?=postgres
+POSTGRES_DB=messages
+
 MYSQL_USER?=root
 MYSQL_DB=Messages
 
@@ -30,7 +33,7 @@ run:
 
 # Run with hot reload (install air: go install github.com/cosmtrek/air@latest)
 dev:
-	air
+	docker compose up backend
 
 # Build the binary
 build:
@@ -95,3 +98,13 @@ docker-build:
 
 docker-run:
 	docker run -p 8080:8080 --env-file .env chat-backend:latest
+
+db-setup-postgres:
+	@echo "Setting up Postgres Database..."
+	docker compose exec postgres psql -U $(POSTGRES_USER) -d postgres -c "CREATE DATABASE $(POSTGRES_DB);"
+	docker compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB) -f create-tables-postgres.sql
+	@echo "Postgres Database schema created"
+
+db-drop-postgres:
+	docker compose exec postgres psql -U $(POSTGRES_USER) -d postgres -c "DROP DATABASE IF EXISTS $(POSTGRES_DB);"
+

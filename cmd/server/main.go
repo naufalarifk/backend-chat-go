@@ -6,6 +6,8 @@ import (
 	"log"
 	"time"
 
+	_ "github.com/lib/pq"
+
 	"realtime-chat-backend/internal/delivery/http"
 	wsDelivery "realtime-chat-backend/internal/delivery/websocket"
 	"realtime-chat-backend/internal/infrastructure/config"
@@ -60,7 +62,7 @@ func main() {
 }
 
 func initDatabase(cfg *config.Config) (*sql.DB, error) {
-	db, err := sql.Open("mysql", cfg.GetDSN())
+	db, err := sql.Open(cfg.Database.Driver, cfg.GetDSN())
 	if err != nil {
 		return nil, fmt.Errorf("failed to open database: %w", err)
 	}
@@ -75,7 +77,7 @@ func initDatabase(cfg *config.Config) (*sql.DB, error) {
 		return nil, fmt.Errorf("failed to ping database: %w", err)
 	}
 
-	log.Println("✅ Database connected successfully")
+	log.Printf("Database connected successfully (driver: %s)", cfg.Database.Driver)
 	return db, nil
 }
 
